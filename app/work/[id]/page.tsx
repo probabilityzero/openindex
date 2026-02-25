@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getWorkById, getWorkResources } from '@/lib/queries';
+import localTags from '@/data/tags';
 import { notFound } from 'next/navigation';
 
 export const revalidate = 86400; // revalidate daily (ISR)
@@ -78,11 +79,14 @@ export default async function WorkPage({ params }: { params: Promise<{ id: strin
               <tr>
                 <td style={{ fontWeight: '600', paddingRight: '1rem', verticalAlign: 'top' }}>Tags</td>
                 <td style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  {tags.map((t: any) => (
-                    <Link key={t.tag_id} href={`/tag/${t.tag_id}`} style={{ color: '#8ab4f8' }}>
-                      {t.tags?.name}
-                    </Link>
-                  ))}
+                        {tags.map((t: any) => {
+                          const name = localTags.find(lt => lt.id === t.tag_id)?.name || t.tag_id;
+                          return (
+                            <Link key={t.tag_id} href={`/tag/${t.tag_id}`} style={{ color: '#8ab4f8' }}>
+                              {name}
+                            </Link>
+                          )
+                        })}
                 </td>
               </tr>
             )}
