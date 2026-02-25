@@ -3,7 +3,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Catalog',
-  description: 'A planet-scale catalog of works, resources, and metadata',
+  description: 'A catalog of works, resources, and metadata',
   viewport: 'width=device-width, initial-scale=1',
 }
 
@@ -14,8 +14,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        {children}
+      <body className="min-h-screen flex flex-col">
+        <main className="flex-1">
+          {children}
+        </main>
+        <footer className='mx-auto max-w-7xl'>
+          <p>Built for long-term cost efficiency. No tracking, no ads, no bloat.</p>
+        </footer>
       </body>
     </html>
   )

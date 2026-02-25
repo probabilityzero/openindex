@@ -16,8 +16,8 @@ export default function Home() {
   return (
     <main style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1rem' }}>
       <header style={{ marginBottom: '3rem' }}>
-        <h1 style={{ fontSize: '28px', marginBottom: '0.5rem' }}>catalog</h1>
-        <p style={{ color: '#999', fontSize: '12px' }}>A planet-scale repository of works, resources, and metadata</p>
+        <h1 style={{ fontSize: '28px', marginBottom: '0.5rem' }}>OPEN INDEX</h1>
+        <p style={{ color: '#999', fontSize: '12px' }}>A repository of works, resources, and metadata</p>
       </header>
 
       <section style={{ marginBottom: '3rem' }}>
@@ -44,10 +44,6 @@ export default function Home() {
           <Link href="/about" style={{ color: '#8ab4f8' }}>About</Link>
         </div>
       </section>
-
-      <footer style={{ marginTop: '4rem', paddingTop: '2rem', borderTop: '1px solid #333', fontSize: '12px', color: '#666' }}>
-        <p>Built for long-term cost efficiency. No tracking, no ads, no bloat.</p>
-      </footer>
     </main>
   );
 }

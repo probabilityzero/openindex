@@ -12,7 +12,7 @@ export default function AboutPage() {
       <section style={{ maxWidth: '600px', lineHeight: '1.7', color: '#ccc' }}>
         <h2 style={{ fontSize: '16px', marginTop: '2rem', marginBottom: '1rem' }}>What is this?</h2>
         <p>
-          A planet-scale catalog of works, resources, and metadata. Built on static generation, Postgres full-text search, and minimal compute.
+          A catalog of works, resources, and metadata. Built on static generation, Postgres full-text search, and minimal compute.
         </p>
 
         <h2 style={{ fontSize: '16px', marginTop: '2rem', marginBottom: '1rem' }}>Philosophy</h2>
