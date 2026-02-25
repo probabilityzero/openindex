@@ -5,7 +5,7 @@ import categories from '@/data/categories'
 export default function Home() {
   
     return (
-      <main className="max-w-[900px] mx-auto py-8 px-4">
+      <main className="max-w-225 mx-auto py-8 px-4">
         <header className="mb-12 justify-center text-center gap-2">
             <img
               src="

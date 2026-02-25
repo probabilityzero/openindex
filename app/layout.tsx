@@ -23,7 +23,7 @@ export default function RootLayout({
             {children}
           </main>
           <footer className='site-footer px-6 text-foreground/60 text-xs flex items-center justify-between py-2 gap-4 border-t mt-8'>
-            <p>OPEN INDEX</p>
+              <Link href="/" className="hover:underline font-semibold">OPEN INDEX</Link>
             <div className='flex items-center justify-between gap-3'>
               <ThemeToggle />
               <div className="hidden sm:block border-l h-4 border-foreground/20" />

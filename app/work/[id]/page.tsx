@@ -1,167 +1,81 @@
-import Link from 'next/link';
-import { getWorkById, getWorkResources } from '@/lib/queries';
-import localTags from '@/data/tags';
-import { notFound } from 'next/navigation';
+import Link from 'next/link'
+import { getWorkById, getWorkResources, getWorksByTag } from '@/lib/workSearch'
+import localTags from '@/data/tags'
+import WorkTabs from '@/components/work-tabs'
 
-export const revalidate = 86400; // revalidate daily (ISR)
+export const revalidate = 604800
 
 export default async function WorkPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+  const { id } = await params
 
-  let work;
-  let resources = [];
+  let work: any = null
+  let resources: any[] = []
+  let related: any[] = []
 
   try {
-    work = await getWorkById(id);
-    if (!work) notFound();
-    resources = await getWorkResources(id);
+    work = await getWorkById(id)
+    if (work) resources = await getWorkResources(id)
+    if (work?.work_tags && work.work_tags.length > 0) { 
+      const firstTag = work.work_tags[0].tag_id
+      related = await getWorksByTag(firstTag, 6)
+    }
   } catch (err) {
-    console.error(err);
-    notFound();
+    console.error(err)
   }
 
-  const creators = work.work_people || [];
-  const tags = work.work_tags || [];
-  const externalIds = work.external_ids || [];
+  if (!work) {
+    return (
+      <main className="max-w-225 mx-auto p-6">
+        <header className="mb-4">
+          <Link href="/" className="text-sm">← home</Link>
+        </header>
+        <h1 className="text-xl mb-2 text-foreground">Work not found</h1>
+        <p className="text-sm text-muted-foreground">The requested work could not be found.</p>
+      </main>
+    )
+  }
 
   return (
-    <main style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1rem' }}>
-      <header style={{ marginBottom: '2rem' }}>
-        <Link href="/" style={{ color: '#8ab4f8', fontSize: '12px' }}>← home</Link>
-      </header>
-
-      <article>
-        <div style={{ marginBottom: '2rem' }}>
-          <h1 style={{ fontSize: '24px', marginBottom: '0.25rem' }}>
-            {work.title}
-          </h1>
-          {work.original_title && work.original_title !== work.title && (
-            <div style={{ fontSize: '12px', color: '#999', marginBottom: '1rem' }}>
-              {work.original_title}
-            </div>
+    <main className="max-w-275 mx-auto py-6 text-foreground">
+      <header className="my-6 px-4 flex items-start gap-6">
+        <div className="w-36 h-48 ci-card shrink-0 overflow-hidden border ci-border">
+          {work.cover_url ? (
+            <img src={work.cover_url} alt={`${work.title} cover`} className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-xs ci-muted-foreground">no cover</div>
           )}
         </div>
 
-        {work.summary && (
-          <div style={{ marginBottom: '2rem', lineHeight: '1.6', color: '#ccc' }}>
-            {work.summary}
+        <div className="flex-1">
+          <div className="text-xl md:text-3xl font-semibold leading-tight">{work.title} {work.year ? <span className="text-base font-normal ci-muted-foreground">({work.year})</span> : null}</div>
+          <div className="mt-1 text-sm text-muted-foreground capitalize">{work.type}{work.original_title && work.original_title !== work.title ? ` · ${work.original_title}` : ''}</div>
+
+          <div className="mt-3 text-xs text-muted-foreground flex flex-wrap gap-3">
+            {work.language && <div>Language: <span className="text-muted">{work.language}</span></div>}
+            {work.runtime && <div>Runtime: <span className="text-muted">{work.runtime}</span></div>}
+            {work.country && <div>Country: <span className="text-muted">{work.country}</span></div>}
           </div>
-        )}
-
-        <table style={{ marginBottom: '2rem', width: '100%' }}>
-          <tbody>
-            <tr>
-              <td style={{ width: '120px', fontWeight: '600', paddingRight: '1rem', verticalAlign: 'top' }}>Type</td>
-              <td>{work.type}</td>
-            </tr>
-            {work.year && (
-              <tr>
-                <td style={{ fontWeight: '600', paddingRight: '1rem', verticalAlign: 'top' }}>Year</td>
-                <td>{work.year}</td>
-              </tr>
-            )}
-            {creators.length > 0 && (
-              <tr>
-                <td style={{ fontWeight: '600', paddingRight: '1rem', verticalAlign: 'top' }}>Creators</td>
-                <td>
-                  {creators.map((cp: any, i: number) => (
-                    <div key={i}>
-                      <Link href={`/person/${cp.people?.id}`} style={{ color: '#8ab4f8' }}>
-                        {cp.people?.name}
-                      </Link>
-                      {cp.role && <span style={{ color: '#999', marginLeft: '0.5rem' }}>({cp.role})</span>}
-                    </div>
-                  ))}
-                </td>
-              </tr>
-            )}
-            {tags.length > 0 && (
-              <tr>
-                <td style={{ fontWeight: '600', paddingRight: '1rem', verticalAlign: 'top' }}>Tags</td>
-                <td style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                        {tags.map((t: any) => {
-                          const name = localTags.find(lt => lt.id === t.tag_id)?.name || t.tag_id;
-                          return (
-                            <Link key={t.tag_id} href={`/tag/${t.tag_id}`} style={{ color: '#8ab4f8' }}>
-                              {name}
-                            </Link>
-                          )
-                        })}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-
-        {externalIds.length > 0 && (
-          <div style={{ marginBottom: '2rem' }}>
-            <h3>External IDs</h3>
-            <table>
-              <tbody>
-                {externalIds.map((ext: any) => (
-                  <tr key={ext.id}>
-                    <td style={{ fontWeight: '600', width: '100px' }}>{ext.source}</td>
-                    <td>
-                      {ext.url ? (
-                        <a href={ext.url} target="_blank" rel="noopener noreferrer" style={{ color: '#8ab4f8' }}>
-                          {ext.external_key}
-                        </a>
-                      ) : (
-                        ext.external_key
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {resources.length > 0 && (
-          <div style={{ marginBottom: '2rem' }}>
-            <h2 style={{ fontSize: '16px', marginBottom: '1rem' }}>Resources ({resources.length})</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Format</th>
-                  <th>Language</th>
-                  <th>Source</th>
-                  <th>Link</th>
-                </tr>
-              </thead>
-              <tbody>
-                {resources.slice(0, 20).map((res: any) => (
-                  <tr key={res.id}>
-                    <td style={{ fontSize: '12px' }}>{res.type}</td>
-                    <td style={{ fontSize: '12px', color: '#999' }}>{res.format}</td>
-                    <td style={{ fontSize: '12px', color: '#999' }}>{res.language}</td>
-                    <td style={{ fontSize: '12px', color: '#999' }}>{res.source}</td>
-                    <td>
-                      {res.locator && (
-                        <a href={res.locator} target="_blank" rel="noopener noreferrer" style={{ color: '#8ab4f8', fontSize: '12px' }}>
-                          link
-                        </a>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {resources.length > 20 && (
-              <div style={{ marginTop: '1rem', fontSize: '12px', color: '#999' }}>
-                ... and {resources.length - 20} more resources
-              </div>
-            )}
-          </div>
-        )}
-      </article>
-
-      <footer style={{ marginTop: '4rem', paddingTop: '2rem', borderTop: '1px solid #333', fontSize: '11px', color: '#666' }}>
-        <div>
-          Created: {new Date(work.created_at).toLocaleDateString()}
         </div>
-      </footer>
+      </header>
+
+      <div className="gap-6">
+          <WorkTabs work={work} resources={resources} externalIds={work.external_ids || []} />
+        </div>
+
+        <aside className='px-3'>
+          <h3 className="text-sm font-semibold mb-3 text-foreground">Related works</h3>
+          {related.length === 0 && <div className="text-muted-foreground text-sm">No related works found.</div>}
+          {related.length > 0 && (
+            <ul className="grid grid-cols-1 gap-3 text-sm">
+              {related.map((r: any) => (
+                <li key={r.id} className="p-2 border ci-border">
+                  <Link href={`/work/${r.id}`} className="ci-link">{r.title}</Link>
+                  <div className="text-muted-foreground text-xs">{r.year} · {r.type}</div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </aside>
     </main>
-  );
+  )
 }
