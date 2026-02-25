@@ -1,7 +1,5 @@
-import Link from 'next/link';
-import { SearchBox } from '@/components/search-box';
-
-export const revalidate = 3600; // revalidate hourly
+import Link from 'next/link'
+import { SearchBox } from '@/components/search-box'
 
 export default function Home() {
   const categories = [
@@ -11,24 +9,24 @@ export default function Home() {
     { type: 'game', label: 'Games' },
     { type: 'book', label: 'Books' },
     { type: 'asset', label: 'Assets' },
-  ];
+  ]
 
   return (
-    <main style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1rem' }}>
-      <header style={{ marginBottom: '3rem' }}>
-        <h1 style={{ fontSize: '28px', marginBottom: '0.5rem' }}>OPEN INDEX</h1>
-        <p style={{ color: '#999', fontSize: '12px' }}>A repository of works, resources, and metadata</p>
+    <main className="max-w-[900px] mx-auto py-8 px-4">
+      <header className="mb-12">
+        <h1 className="text-[28px] mb-2">OPEN INDEX</h1>
+        <p className="text-xs">A repository of works, resources, and metadata</p>
       </header>
 
-      <section style={{ marginBottom: '3rem' }}>
+      <section className="mb-12">
         <SearchBox />
       </section>
 
-      <section style={{ marginBottom: '3rem' }}>
-        <h2 style={{ fontSize: '14px', marginBottom: '1rem', fontWeight: 'normal' }}>Categories:</h2>
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <section className="mb-12">
+        <h2 className="text-sm mb-4 font-normal">Categories:</h2>
+        <div className="flex gap-4 flex-wrap">
           {categories.map(cat => (
-            <Link key={cat.type} href={`/browse/${cat.type}`} style={{ color: '#8ab4f8' }}>
+            <Link key={cat.type} href={`/browse/${cat.type}`} className="text-sky-400 hover:underline">
               {cat.label}
             </Link>
           ))}
@@ -36,14 +34,14 @@ export default function Home() {
       </section>
 
       <section>
-        <h2 style={{ fontSize: '14px', marginBottom: '1rem', fontWeight: 'normal' }}>Pages:</h2>
-        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-          <Link href="/people" style={{ color: '#8ab4f8' }}>People</Link>
-          <Link href="/tags" style={{ color: '#8ab4f8' }}>Tags</Link>
-          <Link href="/submit" style={{ color: '#8ab4f8' }}>Submit</Link>
-          <Link href="/about" style={{ color: '#8ab4f8' }}>About</Link>
+        <h2 className="text-sm mb-4 font-normal">Pages:</h2>
+        <div className="flex gap-6 flex-wrap">
+          <Link href="/people" className="text-sky-400 hover:underline">People</Link>
+          <Link href="/tags" className="text-sky-400 hover:underline">Tags</Link>
+          <Link href="/submit" className="text-sky-400 hover:underline">Submit</Link>
+          <Link href="/about" className="text-sky-400 hover:underline">About</Link>
         </div>
       </section>
     </main>
-  );
+  )
 }

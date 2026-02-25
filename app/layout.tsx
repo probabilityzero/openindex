@@ -21,13 +21,13 @@ export default function RootLayout({
           <main className="flex-1">
             {children}
           </main>
+          <footer className='site-footer px-6 text-foreground/60 text-xs flex items-center justify-between py-2 gap-4 border-t mt-8'>
+            <p>OPEN INDEX</p>
+            <div>
+              <ThemeToggle />
+            </div>
+          </footer>
         </ThemeProvider>
-        <footer className='mx-auto max-w-7xl' style={{ marginTop: '4rem', paddingTop: '2rem', borderTop: '1px solid #333', fontSize: '12px', color: '#666', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <p style={{ margin: 0 }}>Built for long-term cost efficiency. No tracking, no ads, no bloat.</p>
-          <div style={{ marginLeft: '1rem' }}>
-            <ThemeToggle />
-          </div>
-        </footer>
       </body>
     </html>
   )
