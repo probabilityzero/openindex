@@ -6,9 +6,16 @@ export default function Home() {
   
     return (
       <main className="max-w-[900px] mx-auto py-8 px-4">
-        <header className="mb-12">
-          <h1 className="text-[28px] mb-2">OPEN INDEX</h1>
-          <p className="text-xs">A repository of works, resources, and metadata</p>
+        <header className="mb-12 justify-center text-center gap-2">
+            <img
+              src="
+              https://static.vecteezy.com/system/resources/thumbnails/051/333/644/small_2x/antique-world-map-with-weathered-edges-vintage-style-cartography-artwork-depicting-continents-and-oceans-in-a-sepia-toned-aged-appearance-png.png
+              "
+              alt="Treasure map"
+              className="w-auto h-30 mx-auto"
+            />
+            <h1 className="text-[28px] mb-2">openmap.org</h1>
+            <p className="text-xs">A repository of works, resources, and metadata</p>
         </header>
   
         <section className="mb-12">
@@ -16,7 +23,7 @@ export default function Home() {
         </section>
   
         <section className="mb-12">
-          <h2 className="text-sm mb-4 font-normal">Categories</h2>
+          <h2 className="text-xs mb-4 font-medium">Browse</h2>
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-3">
             {categories.map(cat => (
               <div key={cat.type} className="space-y-1">

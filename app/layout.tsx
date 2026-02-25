@@ -26,6 +26,8 @@ export default function RootLayout({
             <p>OPEN INDEX</p>
             <div className='flex items-center justify-between gap-3'>
               <ThemeToggle />
+              <div className="hidden sm:block border-l h-4 border-foreground/20" />
+              <Link href="/submit" className="text-sky-400 hover:underline">Submit</Link>
               <Link href="/about" className="text-sky-400 hover:underline">About</Link>
             </div>
           </footer>
